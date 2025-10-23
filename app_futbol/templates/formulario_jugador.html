@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block titulo %}{{ titulo }}{% endblock %}
+
+{% block contenido %}
+<h2>{{ titulo }}</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <table>
+        {{ form.as_table }}
+    </table>
+    
+    <div style="margin-top: 20px;">
+        <button type="submit" style="padding: 10px 20px; background: #27ae60; color: white; border: none; cursor: pointer;">
+            💾 Guardar Jugador
+        </button>
+        <a href="{% url 'app_futbol:listar_jugadores' %}" style="padding: 10px 20px; background: #95a5a6; color: white; text-decoration: none;">
+            ❌ Cancelar
+        </a>
+    </div>
+</form>
+
+<h3>Información de Clave Foránea</h3>
+<p><strong>Campo "equipo":</strong> Es una clave foránea que relaciona al jugador con un equipo específico.</p>
+<p><strong>Campo "foto_jugador":</strong> Ahora los jugadores pueden tener foto (opcional).</p>
+<p><strong>En la base de datos:</strong> Se almacena como <code>equipo_id</code> con el ID del equipo.</p>
+{% endblock %}

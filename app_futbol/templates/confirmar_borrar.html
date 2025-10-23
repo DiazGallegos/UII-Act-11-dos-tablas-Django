@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block titulo %}Eliminar {{ tipo }}{% endblock %}
+
+{% block contenido %}
+<h2>Confirmar Eliminación</h2>
+
+<div style="border: 2px solid #e74c3c; padding: 20px; margin: 20px 0;">
+    <h3>¿Está seguro de eliminar {% if tipo == 'equipo' %}el equipo{% else %}al jugador{% endif %}?</h3>
+    
+    <table style="width: 100%; margin: 15px 0;">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            {% if tipo == 'jugador' %}
+            <th>Equipo (Foráneo)</th>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>{{ objeto.id }}</td>
+            <td><strong>{{ objeto.nombre }}</strong></td>
+            {% if tipo == 'jugador' %}
+            <td>{{ objeto.equipo.nombre }} (ID: {{ objeto.equipo.id }})</td>
+            {% endif %}
+        </tr>
+    </table>
+    
+    {% if tipo == 'equipo' %}
+    <p style="color: #e74c3c; font-weight: bold;">
+        ⚠️ También se eliminarán {{ objeto.jugadores.count }} jugadores asociados a este equipo.
+    </p>
+    {% endif %}
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" style="padding: 10px 20px; background: #e74c3c; color: white; border: none; cursor: pointer;">
+        ✅ Sí, Eliminar
+    </button>
+    <a href="{% if tipo == 'equipo' %}{% url 'app_futbol:listar_equipos' %}{% else %}{% url 'app_futbol:listar_jugadores' %}{% endif %}" 
+       style="padding: 10px 20px; background: #95a5a6; color: white; text-decoration: none;">
+        ❌ Cancelar
+    </a>
+</form>
+{% endblock %}

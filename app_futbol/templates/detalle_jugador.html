@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block titulo %}Detalle de Jugador: {{ jugador.nombre_completo }}{% endblock %}
+
+{% block contenido %}
+<h2>Detalle del Jugador</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Campo</th>
+            <th>Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>ID</strong></td>
+            <td>{{ jugador.id }}</td>
+        </tr>
+        <tr>
+            <td><strong>Foto</strong></td>
+            <td>
+                {% if jugador.foto_jugador %}
+                    <img src="{{ jugador.foto_jugador.url }}" alt="Foto de {{ jugador.nombre_completo }}" width="150" height="150" style="border-radius: 50%; object-fit: cover; border: 3px solid #3498db;">
+                {% else %}
+                    <div style="width: 150px; height: 150px; background: #f0f0f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #999; border: 3px solid #bdc3c7;">
+                        👤
+                    </div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Nombre Completo</strong></td>
+            <td>{{ jugador.nombre_completo }}</td>
+        </tr>
+        <tr>
+            <td><strong>Equipo (Clave Foránea)</strong></td>
+            <td>
+                <strong>{{ jugador.equipo.nombre }}</strong><br>
+                <small>ID Equipo: {{ jugador.equipo.id }}</small>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Fecha Nacimiento</strong></td>
+            <td>{{ jugador.fecha_nacimiento }}</td>
+        </tr>
+        <tr>
+            <td><strong>Posición</strong></td>
+            <td>{{ jugador.get_posicion_display }}</td>
+        </tr>
+        <tr>
+            <td><strong>Número Camiseta</strong></td>
+            <td>{{ jugador.numero_camiseta }}</td>
+        </tr>
+        <tr>
+            <td><strong>Nacionalidad</strong></td>
+            <td>{{ jugador.nacionalidad }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Información de la Relación</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Concepto</th>
+            <th>Descripción</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Clave Foránea</strong></td>
+            <td>El campo "equipo" es una ForeignKey que relaciona al jugador con un equipo específico</td>
+        </tr>
+        <tr>
+            <td><strong>En Base de Datos</strong></td>
+            <td>Se almacena como <code>equipo_id = {{ jugador.equipo.id }}</code></td>
+        </tr>
+        <tr>
+            <td><strong>Relación Inversa</strong></td>
+            <td>Desde el equipo: <code>equipo.jugadores.all()</code> devuelve todos sus jugadores</td>
+        </tr>
+    </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'app_futbol:editar_jugador' jugador.id %}" class="btn btn-edit">Editar Jugador</a>
+    <a href="{% url 'app_futbol:borrar_jugador' jugador.id %}" class="btn btn-delete">Borrar Jugador</a>
+    <a href="{% url 'app_futbol:listar_jugadores' %}" class="btn">Volver a Jugadores</a>
+</div>
+{% endblock %}

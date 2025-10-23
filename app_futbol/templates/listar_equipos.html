@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block titulo %}Lista de Equipos{% endblock %}
+
+{% block contenido %}
+<h2>Tabla de Equipos</h2>
+<a href="{% url 'app_futbol:crear_equipo' %}" class="btn btn-primary">Agregar Nuevo Equipo</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Ciudad</th>
+            <th>Fecha Fundación</th>
+            <th>Entrenador</th>
+            <th>Posición Entrenador</th>
+            <th>Siglas</th>
+            <th>Color Principal</th>
+            <th>Escudo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for equipo in equipos %}
+        <tr>
+            <td>{{ equipo.id }}</td>
+            <td><strong>{{ equipo.nombre }}</strong></td>
+            <td>{{ equipo.ciudad }}</td>
+            <td>{{ equipo.fecha_fundacion }}</td>
+            <td>{{ equipo.entrenador }}</td>
+            <td>{{ equipo.get_posicion_entrenador_display }}</td>
+            <td>{{ equipo.siglas }}</td>
+            <td style="background-color: {{ equipo.color_principal }}; color: white;">{{ equipo.color_principal }}</td>
+            <td>
+                {% if equipo.escudo %}
+                    <img src="{{ equipo.escudo.url }}" alt="Escudo" width="50">
+                {% else %}
+                    Sin imagen
+                {% endif %}
+            </td>
+            <td class="actions">
+                <a href="{% url 'app_futbol:editar_equipo' equipo.id %}" class="btn btn-edit">Editar</a>
+                <a href="{% url 'app_futbol:borrar_equipo' equipo.id %}" class="btn btn-delete">Borrar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="10" style="text-align: center;">No hay equipos registrados</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Jugadores por Equipo</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Equipo</th>
+            <th>Cantidad de Jugadores</th>
+            <th>Lista de Jugadores</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for equipo in equipos %}
+        <tr>
+            <td>{{ equipo.nombre }}</td>
+            <td>{{ equipo.jugadores.count }}</td>
+            <td>
+                {% for jugador in equipo.jugadores.all %}
+                    {{ jugador.nombre_completo }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    Sin jugadores
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

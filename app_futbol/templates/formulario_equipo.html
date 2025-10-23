@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block titulo %}{{ titulo }}{% endblock %}
+
+{% block contenido %}
+<h2>{{ titulo }}</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <table>
+        {{ form.as_table }}
+    </table>
+    
+    <div style="margin-top: 20px;">
+        <button type="submit" style="padding: 10px 20px; background: #27ae60; color: white; border: none; cursor: pointer;">
+            Guardar Equipo
+        </button>
+        <a href="{% url 'app_futbol:listar_equipos' %}" style="padding: 10px 20px; background: #95a5a6; color: white; text-decoration: none;">
+            Cancelar
+        </a>
+    </div>
+</form>
+{% endblock %}

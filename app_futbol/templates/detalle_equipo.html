@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block titulo %}Detalle de Equipo: {{ equipo.nombre }}{% endblock %}
+
+{% block contenido %}
+<h2>Detalle del Equipo</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Campo</th>
+            <th>Valor</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>ID</strong></td>
+            <td>{{ equipo.id }}</td>
+        </tr>
+        <tr>
+            <td><strong>Nombre</strong></td>
+            <td>{{ equipo.nombre }}</td>
+        </tr>
+        <tr>
+            <td><strong>Ciudad</strong></td>
+            <td>{{ equipo.ciudad }}</td>
+        </tr>
+        <tr>
+            <td><strong>Fecha Fundación</strong></td>
+            <td>{{ equipo.fecha_fundacion }}</td>
+        </tr>
+        <tr>
+            <td><strong>Entrenador</strong></td>
+            <td>{{ equipo.entrenador }}</td>
+        </tr>
+        <tr>
+            <td><strong>Posición Entrenador</strong></td>
+            <td>{{ equipo.get_posicion_entrenador_display }}</td>
+        </tr>
+        <tr>
+            <td><strong>Siglas</strong></td>
+            <td>{{ equipo.siglas }}</td>
+        </tr>
+        <tr>
+            <td><strong>Color Principal</strong></td>
+            <td style="background-color: {{ equipo.color_principal }}; color: white;">{{ equipo.color_principal }}</td>
+        </tr>
+        <tr>
+            <td><strong>Escudo</strong></td>
+            <td>
+                {% if equipo.escudo %}
+                    <img src="{{ equipo.escudo.url }}" alt="Escudo" width="100">
+                {% else %}
+                    Sin imagen
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Jugadores de este Equipo (Relación Inversa)</h3>
+{% if equipo.jugadores.all %}
+<table>
+    <thead>
+        <tr>
+            <th>ID Jugador</th>
+            <th>Nombre</th>
+            <th>Posición</th>
+            <th>Número</th>
+            <th>Nacionalidad</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for jugador in equipo.jugadores.all %}
+        <tr>
+            <td>{{ jugador.id }}</td>
+            <td>{{ jugador.nombre_completo }}</td>
+            <td>{{ jugador.get_posicion_display }}</td>
+            <td>{{ jugador.numero_camiseta }}</td>
+            <td>{{ jugador.nacionalidad }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Este equipo no tiene jugadores registrados.</p>
+{% endif %}
+
+<div style="margin-top: 20px;">
+    <a href="{% url 'app_futbol:editar_equipo' equipo.id %}" class="btn btn-edit">Editar Equipo</a>
+    <a href="{% url 'app_futbol:borrar_equipo' equipo.id %}" class="btn btn-delete">Borrar Equipo</a>
+    <a href="{% url 'app_futbol:listar_equipos' %}" class="btn">Volver a Equipos</a>
+</div>
+{% endblock %}
